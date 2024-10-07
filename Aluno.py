@@ -1,33 +1,31 @@
 import CalcNota
-import BancoDados
+from BancoDados import BancoDados
+
 class Aluno:
-    cursor = BancoDados.cursor()
-    def __init__(self,nome,media,situacao):
-        self.nome = nome
-        self.media = media
-        self.situacao = situacao
-    
-    def AdicionarAluno(self, nota1, nota2, nota3):
+    def __init__(self):
+        self.bd = BancoDados()
+        self.cursor = self.bd.cursor
+
+    def AdicionarAluno(self, nome, nota1, nota2, nota3):
         calcMedia = CalcNota.CalcNota(nota1, nota2, nota3)
         media = calcMedia.media()
         situacao = self.situacao(media)
 
-        sql = "INSERT INTO alunos (nome, nota1, nota2, nota3, media, situacao) VALUES (%s, %s, %s, %s, %s, %s)"
-        self.cursor.execute(sql, (self.nome, nota1, nota2, nota3, media, situacao))
-        BancoDados.commit()
-        
+        sql = "INSERT INTO aluno (nome, media, situacao) VALUES (%s, %s, %s)"
+        self.cursor.execute(sql, (nome, media, situacao))
+        self.bd.commit()
+
     def ListarAlunos(self):
-        listar = "SELECT * FROM alunos"
+        listar = "SELECT * FROM aluno"
         self.cursor.execute(listar)
         return self.cursor.fetchall()
-        
-    
-    def DeletarAluno(self,nome):
-        sql = "DELETE FROM alunos WHERE nome = %s"
-        self.cursor.execute(sql, (nome,))
-        BancoDados.commit() 
 
-    def situacao(self,media):
+    def DeletarAluno(self, nome):
+        sql = "DELETE FROM aluno WHERE nome = %s"
+        self.cursor.execute(sql, (nome,))
+        self.bd.commit()
+
+    def situacao(self, media):
         if media >= 7:
             return "Aprovado"
         else:

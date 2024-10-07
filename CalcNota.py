@@ -5,4 +5,7 @@ class CalcNota:
         self.nota3 = nota3
 
     def media(self):
-        return (self.nota1 + self.nota2 + self.nota3) / 3
+        media = (self.nota1 + self.nota2 + self.nota3) / 3
+        if media > 10:
+            media = 10
+        return media

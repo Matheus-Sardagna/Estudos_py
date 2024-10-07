@@ -1,5 +1,6 @@
 import CalcNota
 from Aluno import Aluno
+from BancoDados import BancoDados
 
 def main():
     aluno = Aluno()
@@ -7,7 +8,7 @@ def main():
     while True:
         print("1 - Adicionar aluno")
         print("2 - Listar aluno")
-        print("4 - Remover aluno")
+        print("3 - Remover aluno")
         print("0 - Sair")
 
         op = int(input("Escolha uma opção: "))
@@ -21,10 +22,17 @@ def main():
             print("Aluno adicionado com sucesso")
 
         elif op == 2:
-            aluno.ListarAlunos()
-
-        elif op == 4:
-            nome = input("Escreva o nome do Aluno que deseja remover: ")
+            alunos = aluno.ListarAlunos()
+            if alunos:
+                print("Lista de alunos:")
+                for aluno_data in alunos:
+                    print("Nome: {}, Média: {:.2f}, Situação: {}".format(
+                        aluno_data[1], float(aluno_data[2]), aluno_data[3]
+                    ))
+            else:
+                print("Nenhum aluno encontrado")
+        elif op == 3:
+            nome = input("Escreva o nome do aluno que deseja remover: ")
             aluno.DeletarAluno(nome)
             print("Aluno removido com sucesso")
 
