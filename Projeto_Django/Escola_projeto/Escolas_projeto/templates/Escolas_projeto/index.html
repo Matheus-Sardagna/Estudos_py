@@ -1,3 +1,295 @@
-<h1 ref="teste">Teste papae</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastro Escolar Moderno</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #eef2f5;
+            margin: 0;
+            padding: 0;
+        }
 
-<p ref="teste">Testando isso aqui</p>
+        header {
+            background-color: #0066cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 10px;
+        }
+
+        /* Estilos dos formulários */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0066cc;
+            outline: none;
+        }
+
+        button {
+            background-color: #0066cc;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #004d99;
+        }
+
+        /* Estilos da tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0066cc;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Estilos de responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Cadastro Escolar Moderno</h1>
+</header>
+
+<div class="container">
+    <!-- Cadastro de Escolas -->
+    <h2>Cadastrar Escola</h2>
+    <div class="form-group">
+        <label for="schoolName">Nome da Escola:</label>
+        <input type="text" id="schoolName" placeholder="Digite o nome da escola">
+    </div>
+    <button onclick="addSchool()">Adicionar Escola</button>
+
+    <!-- Cadastro de Turmas -->
+    <h2>Cadastrar Turma</h2>
+    <div class="form-group">
+        <label for="classSchool">Escola da Turma:</label>
+        <select id="classSchool">
+            <option value="">Selecione uma escola</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="className">Nome da Turma:</label>
+        <input type="text" id="className" placeholder="Digite o nome da turma">
+    </div>
+    <button onclick="addClass()">Adicionar Turma</button>
+
+    <!-- Cadastro de Alunos -->
+    <h2>Cadastrar Aluno</h2>
+    <div class="form-group">
+        <label for="studentName">Nome do Aluno:</label>
+        <input type="text" id="studentName" placeholder="Digite o nome do aluno">
+    </div>
+    <div class="form-group">
+        <label for="studentSchool">Escola do Aluno:</label>
+        <select id="studentSchool" onchange="updateStudentClasses()">
+            <option value="">Selecione uma escola</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="studentClass">Turma do Aluno:</label>
+        <select id="studentClass">
+            <option value="">Selecione uma turma</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="studentGrade">Nota do Aluno:</label>
+        <input type="number" id="studentGrade" placeholder="Digite a nota do aluno" min="0" max="10" step="0.1">
+    </div>
+    <button onclick="addStudent()">Adicionar Aluno</button>
+
+    <!-- Listagem de Alunos -->
+    <h2>Listagem de Alunos</h2>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Nome do Aluno</th>
+                <th>Escola</th>
+                <th>Turma</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let schools = [];
+    let classes = [];
+    let students = [];
+
+    // Função para adicionar uma escola
+    function addSchool() {
+        const schoolName = document.getElementById('schoolName').value;
+        if (schoolName) {
+            if (!schools.includes(schoolName)) {
+                schools.push(schoolName);
+                updateSchoolOptions();
+                alert('Escola adicionada com sucesso!');
+                document.getElementById('schoolName').value = '';
+            } else {
+                alert('Esta escola já está cadastrada.');
+            }
+        } else {
+            alert('Por favor, insira o nome da escola.');
+        }
+    }
+
+    // Atualiza as opções de escolas nos selects
+    function updateSchoolOptions() {
+        const classSchoolSelect = document.getElementById('classSchool');
+        const studentSchoolSelect = document.getElementById('studentSchool');
+        classSchoolSelect.innerHTML = '<option value="">Selecione uma escola</option>';
+        studentSchoolSelect.innerHTML = '<option value="">Selecione uma escola</option>';
+        schools.forEach(schoolName => {
+            const option1 = document.createElement('option');
+            option1.value = schoolName;
+            option1.textContent = schoolName;
+            classSchoolSelect.appendChild(option1);
+
+            const option2 = document.createElement('option');
+            option2.value = schoolName;
+            option2.textContent = schoolName;
+            studentSchoolSelect.appendChild(option2);
+        });
+    }
+
+    // Função para adicionar uma turma
+    function addClass() {
+        const className = document.getElementById('className').value;
+        const classSchool = document.getElementById('classSchool').value;
+        if (className && classSchool) {
+            if (!classes.find(c => c.name === className && c.school === classSchool)) {
+                classes.push({ name: className, school: classSchool });
+                alert('Turma adicionada com sucesso!');
+                document.getElementById('className').value = '';
+            } else {
+                alert('Esta turma já está cadastrada nesta escola.');
+            }
+        } else {
+            alert('Por favor, preencha todos os campos da turma.');
+        }
+    }
+
+    // Atualiza as opções de turmas no select de alunos com base na escola selecionada
+    function updateStudentClasses() {
+        const studentSchool = document.getElementById('studentSchool').value;
+        const studentClassSelect = document.getElementById('studentClass');
+        studentClassSelect.innerHTML = '<option value="">Selecione uma turma</option>';
+
+        const filteredClasses = classes.filter(c => c.school === studentSchool);
+        filteredClasses.forEach(c => {
+            const option = document.createElement('option');
+            option.value = c.name;
+            option.textContent = c.name;
+            studentClassSelect.appendChild(option);
+        });
+    }
+
+    // Função para adicionar um aluno
+    function addStudent() {
+        const studentName = document.getElementById('studentName').value;
+        const studentSchool = document.getElementById('studentSchool').value;
+        const studentClass = document.getElementById('studentClass').value;
+        const studentGrade = document.getElementById('studentGrade').value;
+        if (studentName && studentSchool && studentClass && studentGrade) {
+            if (!students.find(s => s.name === studentName && s.school === studentSchool && s.class === studentClass)) {
+                students.push({ name: studentName, school: studentSchool, class: studentClass, grade: studentGrade });
+                alert('Aluno adicionado com sucesso!');
+                document.getElementById('studentName').value = '';
+                document.getElementById('studentSchool').value = '';
+                document.getElementById('studentClass').value = '';
+                document.getElementById('studentGrade').value = '';
+            } else {
+                alert('Este aluno já está cadastrado nesta turma.');
+            }
+        } else {
+            alert('Por favor, preencha todos os campos do aluno.');
+        }
+    }
+</script>
