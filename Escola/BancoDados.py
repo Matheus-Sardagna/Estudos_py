@@ -7,7 +7,7 @@ class BancoDados:
             host='localhost',
             user='root',
             password='0000',
-            database='escola'
+            database='escola_gerenciador'
         )
         self.cursor = self.conexao.cursor()
 

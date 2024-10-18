@@ -1,10 +1,32 @@
+from tkinter import *
 import CalcNota
+#from Escola import Escola
+#from Turma import Turma
 from Aluno import Aluno
 from BancoDados import BancoDados
 
 def main():
     aluno = Aluno()
+    #Isso é do dislay, o que vai aparecer na tela. Estou arrumando isso.
+    display = Tk()
 
+    largura_tela = display.winfo_screenwidth()
+    altura_tela = display.winfo_screenheight()
+
+    largura_janela = 700
+    altura_janela = 500
+
+    x = (largura_tela - largura_janela) / 2
+    y = (altura_tela - altura_janela) / 2
+
+    display.geometry(f"{largura_janela}x{altura_janela}+{int(x)}+{int(y)}")
+    display.title("Gerenciador de tarefas")
+
+
+
+    display.mainloop()  
+    
+"""
     while True:
         print("1 - Adicionar aluno")
         print("2 - Listar aluno")
@@ -42,6 +64,6 @@ def main():
         else:
             print("Opção inválida")
             break
-
+"""
 if __name__ == '__main__':
     main()
