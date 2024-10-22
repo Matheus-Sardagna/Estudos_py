@@ -22,8 +22,17 @@ def main():
     display.geometry(f"{largura_janela}x{altura_janela}+{int(x)}+{int(y)}")
     display.title("Gerenciador de tarefas")
 
-    label = Label(display, text="Escreva o nome da escola: ")
-    label.pack()
+    botaoAdicionar = Button(display, text="Adicionar Aluno", command=aluno.AdicionarAluno)
+    botaoAdicionar.pack()
+
+    botaoListar = Button(display, text="Listar Alunos", command=aluno.ListarAlunos)
+    botaoListar.pack()
+
+    botaoAtualizar = Button(display, text="Atualizar Aluno", command=aluno.AtualizarAluno)
+    botaoAtualizar.pack()
+
+    botaoRemover = Button(display, text="Remover Aluno", command=aluno.DeletarAluno)
+    botaoRemover.pack()
 
     entry = Entry( display, width=50)
     entry.pack()
