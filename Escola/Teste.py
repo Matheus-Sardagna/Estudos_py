@@ -22,6 +22,12 @@ def main():
     display.geometry(f"{largura_janela}x{altura_janela}+{int(x)}+{int(y)}")
     display.title("Gerenciador de tarefas")
 
+    label = Label(display, text="Escreva o nome da escola: ")
+    label.pack()
+
+    entry = Entry( display, width=50)
+    entry.pack()
+
 
 
     display.mainloop()  
